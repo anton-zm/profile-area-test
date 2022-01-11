@@ -5,7 +5,7 @@ class Api implements ProjectApi {
         throw new Error('Not implemented yet')
     }
 
-    async signUp(name: string, password: string): Promise<string> {
+    async signUp(name: string, password: string): Promise<boolean> {
         throw new Error('Not implemented yet')
     }
 

@@ -4,6 +4,7 @@ import { ErrorText, FormTitle, PromptText, TextInput } from "./typography";
 import { Colors } from "../../interface";
 import { Button } from "../button";
 import { useStore } from "../../store/use-store";
+import axios from "axios";
 
 export const SignUpForm = observer(() => {
     const store = useStore()
@@ -30,9 +31,23 @@ export const SignUpForm = observer(() => {
         }
     },[password, name])
 
-    const Submit = () => {
-        if(!name)setNameError('Username is required!')
-        if(!name)setPasswordError('Password is required!') 
+    const Submit = async () => {
+        console.log('click')
+            try{
+                const result = await axios.post('http://localhost:3010/test', {
+                    username: 'Testname',
+                    password: '1111'
+                })
+                console.log(result)
+            }catch(e){
+                console.log(e)
+            }
+        // if(!name)setNameError('Username is required!')
+        // if(!name)setPasswordError('Password is required!') 
+        // if(isValid){
+            
+            
+        //}
     }
 
     const switchForm = () => {
