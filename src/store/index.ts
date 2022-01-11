@@ -7,7 +7,13 @@ export class Storage {
         makeAutoObservable(this)
     }
 
-    
+    setLogin(v:boolean){
+        this._isLogged = v
+    }
+
+    get login(){
+        return this._isLogged
+    }
 }
 
 

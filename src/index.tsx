@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './assets/styles/index.css';
-//import App from './App';
 import { Route, Router, Switch } from 'react-router-dom'
 import { useStore, Ctx, Store } from './store/use-store';
 import { history } from './utils/history'
@@ -15,9 +14,10 @@ const App = observer(() => {
   return (
     <Ctx.Provider value={Store}>
       <Router history={history}>
+        {!store.login ? <Login /> : 
         <Switch>
           <Route exact path='/' component={Home} />
-        </Switch>
+        </Switch>}
       </Router>
     </Ctx.Provider>
   )
