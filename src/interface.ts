@@ -4,3 +4,30 @@ export enum Colors {
 }
 
 export type FormType = 'signin' |  'signup'
+
+export interface Contact {
+    name: string,
+    phone: string,
+    email: string,
+    id? : string
+}
+
+export interface ProjectApi {
+    signIn(
+        name: string,
+        password: string
+    ): Promise<string>
+
+    signUp(
+        name: string,
+        password: string
+    ): Promise<string>
+
+    getContacts(id: string): Promise<Contact[]>
+
+    createContact(contact: Contact): Promise<boolean>
+
+    deleteContact(id: string): Promise<boolean>
+
+    updateContact(contact: Contact): Promise<boolean>
+}
