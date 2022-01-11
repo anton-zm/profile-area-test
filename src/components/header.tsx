@@ -17,6 +17,18 @@ const Logo = styled.p`
     font-size: 22px;
     color: ${Colors.MAIN};
 `
+const FormSwitcher = observer(() => {
+    const store = useStore()
+    const isSignInForm = store.formType === 'signin'
+    const text = isSignInForm ? 'Sign Up' : 'Sign In'
+
+    return (
+        <p className="clickable" onClick={() => {
+            const type = isSignInForm ? 'signup' : 'signin'
+            store.setFormType(type)
+        }}>{text}</p>
+    )
+})
 
 export const Header = observer(() => { 
     const store = useStore()
@@ -26,7 +38,7 @@ export const Header = observer(() => {
             <Content>
                 <HeaderContentWrapper className="flex-row between">
                     <Logo>My Contacts</Logo>
-                    {store.login ? <p>Log out</p> : <p>Sign Up</p>}
+                    {store.login ? <p>Log out</p> : <FormSwitcher />}
                 </HeaderContentWrapper>
             </Content>
         </HeaderWrapper>

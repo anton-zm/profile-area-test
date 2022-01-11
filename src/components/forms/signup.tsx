@@ -5,7 +5,7 @@ import { Colors } from "../../interface";
 import { Button } from "../button";
 import { useStore } from "../../store/use-store";
 
-export const SignInForm = observer(() => {
+export const SignUpForm = observer(() => {
     const store = useStore()
     const [nameError, setNameError] = useState('')
     const [passwordError, setPasswordError] = useState('')
@@ -36,12 +36,12 @@ export const SignInForm = observer(() => {
     }
 
     const switchForm = () => {
-        store.setFormType('signup')
+        store.setFormType('signin')
     }
     
     return (
         <div className="flex-column centered">
-            <FormTitle>Log in to your account</FormTitle>
+            <FormTitle>Create your account!</FormTitle>
             <TextInput 
                 value={name} 
                 type='text' 
@@ -72,7 +72,7 @@ export const SignInForm = observer(() => {
                 Sign in
             </Button>
             <ErrorText>{serverError}</ErrorText>
-            <PromptText>Don't have an account? <span onClick={switchForm}>Sign Up</span></PromptText>
+            <PromptText>Have an account? <span onClick={switchForm}>Sign In</span></PromptText>
         </div>
     )
-})
+}) 
