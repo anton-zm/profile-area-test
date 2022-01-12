@@ -12,6 +12,12 @@ export interface Contact {
     id? : string
 }
 
+export interface User {
+    id: string,
+    contacts: Contact[],
+    username: string,
+}
+
 export interface ProjectApi {
     signIn(
         name: string,

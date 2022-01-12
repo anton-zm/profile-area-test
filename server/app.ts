@@ -55,7 +55,7 @@ app.post('/signin', (req,res) => {
       })
       .catch((e: any) => {
         console.log(e)
-        res.status(401).send(e.message)
+        res.status(401).send({message: e.message})
       });
   }
 })

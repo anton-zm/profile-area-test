@@ -3,8 +3,19 @@ import { Contact, ProjectApi } from "../interface";
 import { config } from "../config";
 
 class Api implements ProjectApi {
-    async signIn(name: string, password: string): Promise<string> {
-        throw new Error('Not implemented yet')
+    async signIn(name: string, password: string): Promise<any> {
+        console.log(name, password)
+        return fetch(`${config.server_url}/signin`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ username: name, password }),
+            })
+            .then(res => res.json())
+            .catch(e => {
+                console.log(e)
+            })
     }
 
     async signUp(name: string, password: string): Promise<boolean> {

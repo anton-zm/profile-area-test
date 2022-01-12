@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from 'styled-components'
 import { observer } from "mobx-react-lite";
 import { Content } from "./content-wrapper";
@@ -32,6 +32,11 @@ const FormSwitcher = observer(() => {
 
 export const Header = observer(() => { 
     const store = useStore()
+
+    useEffect(() => {
+        const user = JSON.parse(store.user)
+        console.log(user)
+    },[store.user])
 
     return (
         <HeaderWrapper>
