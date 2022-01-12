@@ -45,7 +45,6 @@ export const SignInForm = observer(() => {
                     if(response.message){
                         setServerError(response.message)
                     }else{
-                        localStorage.setItem('token', response.token)
                         store.setLogin(true)
                         store.setUser(hydrateUser(response.user))
                         setServerError('')

@@ -37,8 +37,7 @@ export const SignUpForm = observer(() => {
         return isValid
     }
 
-    const setUser = (user: User) => {
-        store.setUser(user)
+    const setLogin = () => {
         store.setLogin(true)
     }
 
@@ -46,7 +45,7 @@ export const SignUpForm = observer(() => {
         validation();
         if(validation()){
             setLoader(true)
-            const response = await api.signUp(name, password, setUser)
+            const response = await api.signUp(name, password, setLogin)
             if(response){
                 setServerError('')
                 

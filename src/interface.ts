@@ -27,7 +27,7 @@ export interface ProjectApi {
     signUp(
         name: string,
         password: string,
-        setUser: () => void
+        setLogin: () => void
     ): Promise<boolean>
 
     getContacts(id: string): Promise<Contact[]>

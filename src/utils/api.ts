@@ -14,12 +14,17 @@ class Api implements ProjectApi {
               body: JSON.stringify({ username: name, password }),
             })
             .then(res => res.json())
+            .then(res => {
+                localStorage.setItem('user', JSON.stringify(hydrateUser(res.user)))
+                localStorage.setItem('token', res.token)
+                return res
+            })
             .catch(e => {
                 console.log(e)
             })
     }
 
-    async signUp(name: string, password: string, setUser: (user:User) => void): Promise<boolean> {
+    async signUp(name: string, password: string, setLogin: () => void): Promise<boolean> {
         try {
             const result = await axios.post(`${config.server_url}/signup`, {
                 username: name,
@@ -27,8 +32,8 @@ class Api implements ProjectApi {
             })
             if(result.status === 200){
                 const user = await this.signIn(name, password)
-                setUser(hydrateUser(user.user))
-                localStorage.setItem('token', user.token)
+                console.log('logged as ' + user.user.username)
+                setLogin()
             }
             return result.status === 200
         }catch(e){

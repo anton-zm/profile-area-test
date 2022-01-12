@@ -12,10 +12,19 @@ const HeaderWrapper = styled.header`
 const HeaderContentWrapper = styled.div`
     padding: 24px 0;
 `
+const LogoutText = styled.p`
+    font-weight: 200;
+    color: ${Colors.GREY};
+`
+const UserText = styled.p`
+    font-weight: normal;
+    color: ${Colors.MAIN};
+`
 
 const Logo = styled.p`
     font-size: 22px;
     color: ${Colors.MAIN};
+    font-weight: 600;
 `
 const FormSwitcher = observer(() => {
     const store = useStore()
@@ -27,6 +36,21 @@ const FormSwitcher = observer(() => {
             const type = isSignInForm ? 'signup' : 'signin'
             store.setFormType(type)
         }}>{text}</p>
+    )
+})
+
+const Logout = observer(() => {
+    const store = useStore()
+    const username = JSON.parse(store.user).name
+    return (
+        <div className="flex-row">
+            <UserText>{username}</UserText>
+            <LogoutText className="clickable" onClick={() => {
+                    localStorage.clear()
+                    store.setLogin(false)
+                }} 
+            />
+        </div>
     )
 })
 
@@ -42,8 +66,8 @@ export const Header = observer(() => {
         <HeaderWrapper>
             <Content>
                 <HeaderContentWrapper className="flex-row between">
-                    <Logo>My Contacts</Logo>
-                    {store.login ? <p>Log out</p> : <FormSwitcher />}
+                    <Logo>My Contacts App</Logo>
+                    {store.login ? <Logout /> : <FormSwitcher />}
                 </HeaderContentWrapper>
             </Content>
         </HeaderWrapper>
