@@ -6,6 +6,7 @@ import { Button } from "../button";
 import { useStore } from "../../store/use-store";
 import { api } from "../../utils/api";
 import { Loader } from "../loader";
+import { hydrateUser } from "../../utils/hydrate";
 
 export const SignUpForm = observer(() => {
     const store = useStore()
@@ -48,7 +49,8 @@ export const SignUpForm = observer(() => {
             const response = await api.signUp(name, password, setLogin)
             if(response){
                 setServerError('')
-                
+                const user = localStorage.getItem('user')
+                store.setUser(hydrateUser(JSON.parse(user!)))
             }else{
                 setServerError('Something went wrong. Try again later.')
             }

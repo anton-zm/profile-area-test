@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from 'styled-components'
 import { observer } from "mobx-react-lite";
 import { Content } from "./content-wrapper";
@@ -8,7 +8,6 @@ import { useStore } from "../store/use-store";
 const HeaderWrapper = styled.header`
     border-bottom: 1px solid ${Colors.MAIN};
 `
-
 const HeaderContentWrapper = styled.div`
     padding: 24px 0;
 `
@@ -19,8 +18,8 @@ const LogoutText = styled.p`
 const UserText = styled.p`
     font-weight: normal;
     color: ${Colors.MAIN};
+    margin-right: 24px;
 `
-
 const Logo = styled.p`
     font-size: 22px;
     color: ${Colors.MAIN};
@@ -41,7 +40,13 @@ const FormSwitcher = observer(() => {
 
 const Logout = observer(() => {
     const store = useStore()
-    const username = JSON.parse(store.user).name
+    const [username, setUsername] = useState('')
+
+    useEffect(() => {
+        const user = JSON.parse(store.user)
+        setUsername(user.username)
+    },[store.user])
+
     return (
         <div className="flex-row">
             <UserText>{username}</UserText>
@@ -49,7 +54,7 @@ const Logout = observer(() => {
                     localStorage.clear()
                     store.setLogin(false)
                 }} 
-            />
+            >Log out</LogoutText>
         </div>
     )
 })
