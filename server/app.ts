@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs'
 import cors from 'cors'
+import jwt from 'jsonwebtoken'
 
 const User = require('./models/user')
 const bodyParser = require('body-parser');
@@ -22,6 +23,11 @@ app.get('/test', (_req: any, res: { send: (arg0: string) => void; }) => {
     res.send('Server is working and everything OK!')
 })
 
+// app.get('/users', (req, res) => {
+//   User.find({})
+//     .then((users: any) => res.send({data: users}))
+// })
+
 app.post('/signup', (req, res) => {
   const { username, password } = req.body;
   const contacts:any[] = []
@@ -36,6 +42,22 @@ app.post('/signup', (req, res) => {
         }))
     })
     .catch(e => console.log(e));
+})
+
+app.post('/signin', (req,res) => {
+  const { username, password } = req.body;
+  if (password) {
+    return User
+      .findUserByCredentials(username, password)
+      .then((userObj:Record<string, any>) => {
+        const token = jwt.sign({ _id: userObj._id }, 'dev-secret', { expiresIn: '7d' });
+        res.send({ token, user: userObj });
+      })
+      .catch((e: any) => {
+        console.log(e)
+        res.status(401).send(e.message)
+      });
+  }
 })
 
 
