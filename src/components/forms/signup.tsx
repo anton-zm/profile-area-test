@@ -4,7 +4,7 @@ import { ErrorText, FormTitle, PromptText, TextInput } from "./typography";
 import { Colors } from "../../interface";
 import { Button } from "../button";
 import { useStore } from "../../store/use-store";
-import axios from "axios";
+import { api } from "../../utils/api";
 
 export const SignUpForm = observer(() => {
     const store = useStore()
@@ -13,41 +13,38 @@ export const SignUpForm = observer(() => {
     const [serverError, setServerError] = useState('')
     const [name, setName] = useState('')
     const [password, setPassword] = useState('')
-    const [isNameValid, setIsNameValid] = useState(false)
-    const [isPasswordValid, setIsPasswordValid] = useState(false)
-
-    const isValid = !isNameValid && !isPasswordValid
-
-    useEffect(() => {
-        if(password){
-            setIsPasswordValid(true)
+    
+    const validation = ():boolean => {
+        let isValid = false
+        if(!name) {
+            setNameError('Username is required!')
+        }else if(name.length < 2) {
+            setNameError('At least 2 characters, please.')
         }else{
-            setIsPasswordValid(false)
+            isValid = true
         }
-        if(name){
-            setIsNameValid(true)
+        if(!password) {
+            setPasswordError('Password is required!')
+            isValid = false
+        }else if(password.length < 6) {
+            setPasswordError('At least 6 characters, please.')
+            isValid = false
         }else{
-            setIsNameValid(false)
+            isValid = true
         }
-    },[password, name])
+        return isValid
+    }
 
     const Submit = async () => {
-        console.log('click')
-            try{
-                const result = await axios.post('http://localhost:3010/test', {
-                    username: 'Testname',
-                    password: '1111'
-                })
-                console.log(result)
-            }catch(e){
-                console.log(e)
+        validation();
+        if(validation()){
+            const response = await api.signUp(name, password)
+            if(response){
+                setServerError('')
+            }else{
+                setServerError('Something went wrong. Try again later.')
             }
-        // if(!name)setNameError('Username is required!')
-        // if(!name)setPasswordError('Password is required!') 
-        // if(isValid){
-            
-            
-        //}
+        }
     }
 
     const switchForm = () => {
@@ -60,7 +57,7 @@ export const SignUpForm = observer(() => {
             <TextInput 
                 value={name} 
                 type='text' 
-                placeholder='Enter your username*'
+                placeholder='Enter your username. At least 2 characters*'
                 onChange={(e) => {
                     setName(e.target.value)
                     setNameError('')
@@ -70,7 +67,7 @@ export const SignUpForm = observer(() => {
             <TextInput 
                 value={password} 
                 type='password' 
-                placeholder='Enter your password*'
+                placeholder='Enter your password. At least 6 characters*'
                 onChange={(e) => {
                     setPassword(e.target.value)
                     setPasswordError('')
@@ -84,7 +81,7 @@ export const SignUpForm = observer(() => {
                 width='50%' 
                 onClick={Submit}
             >
-                Sign in
+                Sign up
             </Button>
             <ErrorText>{serverError}</ErrorText>
             <PromptText>Have an account? <span onClick={switchForm}>Sign In</span></PromptText>

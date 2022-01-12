@@ -1,4 +1,4 @@
 export const config = {
-    server_url: ' http://localhost:3010',
+    server_url: 'http://localhost:3010',
     
 }
