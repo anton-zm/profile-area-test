@@ -1,10 +1,11 @@
 import axios from "axios";
-import { Contact, ProjectApi } from "../interface";
+import { Contact, ProjectApi, User } from "../interface";
 import { config } from "../config";
+import { hydrateUser } from "./hydrate";
 
 class Api implements ProjectApi {
+
     async signIn(name: string, password: string): Promise<any> {
-        console.log(name, password)
         return fetch(`${config.server_url}/signin`, {
             method: 'POST',
             headers: {
@@ -18,12 +19,17 @@ class Api implements ProjectApi {
             })
     }
 
-    async signUp(name: string, password: string): Promise<boolean> {
+    async signUp(name: string, password: string, setUser: (user:User) => void): Promise<boolean> {
         try {
             const result = await axios.post(`${config.server_url}/signup`, {
                 username: name,
                 password
             })
+            if(result.status === 200){
+                const user = await this.signIn(name, password)
+                setUser(hydrateUser(user.user))
+                localStorage.setItem('token', user.token)
+            }
             return result.status === 200
         }catch(e){
             console.log(e)

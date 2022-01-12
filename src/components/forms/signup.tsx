@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
 import { ErrorText, FormTitle, PromptText, TextInput } from "./typography";
-import { Colors } from "../../interface";
+import { Colors, User } from "../../interface";
 import { Button } from "../button";
 import { useStore } from "../../store/use-store";
 import { api } from "../../utils/api";
@@ -37,13 +37,19 @@ export const SignUpForm = observer(() => {
         return isValid
     }
 
+    const setUser = (user: User) => {
+        store.setUser(user)
+        store.setLogin(true)
+    }
+
     const Submit = async () => {
         validation();
         if(validation()){
             setLoader(true)
-            const response = await api.signUp(name, password)
+            const response = await api.signUp(name, password, setUser)
             if(response){
                 setServerError('')
+                
             }else{
                 setServerError('Something went wrong. Try again later.')
             }
