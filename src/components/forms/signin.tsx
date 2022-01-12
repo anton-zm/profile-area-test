@@ -6,6 +6,7 @@ import { Button } from "../button";
 import { useStore } from "../../store/use-store";
 import { api } from "../../utils/api";
 import { hydrateUser } from "../../utils/hydrate";
+import { Loader } from "../loader";
 
 export const SignInForm = observer(() => {
     const store = useStore()
@@ -14,6 +15,7 @@ export const SignInForm = observer(() => {
     const [serverError, setServerError] = useState('')
     const [name, setName] = useState('')
     const [password, setPassword] = useState('')
+    const [loader, setLoader] = useState(false)
     
     const validation = ():boolean => {
         let isValid = false
@@ -34,6 +36,7 @@ export const SignInForm = observer(() => {
     const Submit = async () => {
         validation();
         if(validation()){
+            setLoader(true)
             try {
                 const response = await api.signIn(name, password)
                 if(!response){
@@ -50,6 +53,8 @@ export const SignInForm = observer(() => {
                 }
             }catch(e){
                 console.log(e)
+            }finally{
+                setLoader(false)
             }
             
         }
@@ -89,7 +94,7 @@ export const SignInForm = observer(() => {
                 width='50%' 
                 onClick={Submit}
             >
-                Sign in
+                {loader ? <Loader /> : 'Sign in'}
             </Button>
             <ErrorText>{serverError}</ErrorText>
             <PromptText>Don't have an account? <span onClick={switchForm}>Sign Up</span></PromptText>

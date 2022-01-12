@@ -5,6 +5,7 @@ import { Colors } from "../../interface";
 import { Button } from "../button";
 import { useStore } from "../../store/use-store";
 import { api } from "../../utils/api";
+import { Loader } from "../loader";
 
 export const SignUpForm = observer(() => {
     const store = useStore()
@@ -13,6 +14,7 @@ export const SignUpForm = observer(() => {
     const [serverError, setServerError] = useState('')
     const [name, setName] = useState('')
     const [password, setPassword] = useState('')
+    const [loader, setLoader] = useState(false)
     
     const validation = ():boolean => {
         let isValid = false
@@ -38,12 +40,14 @@ export const SignUpForm = observer(() => {
     const Submit = async () => {
         validation();
         if(validation()){
+            setLoader(true)
             const response = await api.signUp(name, password)
             if(response){
                 setServerError('')
             }else{
                 setServerError('Something went wrong. Try again later.')
             }
+            setLoader(false)
         }
     }
 
@@ -81,7 +85,7 @@ export const SignUpForm = observer(() => {
                 width='50%' 
                 onClick={Submit}
             >
-                Sign up
+                {loader ? <Loader /> : 'Sign up'}
             </Button>
             <ErrorText>{serverError}</ErrorText>
             <PromptText>Have an account? <span onClick={switchForm}>Sign In</span></PromptText>
