@@ -121,6 +121,30 @@ app.patch('/contacts', async (req,res) => {
   }
 })
 
+app.patch('/edit-contact', async (req,res) => {
+  const { authorization } = req.headers;
+  const { contact } = req.body;
+  const auth_status = auth(authorization!)
+
+  try {
+    if(auth_status.isAuth){
+      const user = await User.findById(auth_status.id)
+      const contacts = user.contacts.filter((e:any) => e.id !== contact.id)
+
+      const updContacts = [...contacts, contact]
+      await User.findByIdAndUpdate(auth_status.id, {
+        contacts: updContacts
+      })
+      res.send({data: contact, ok: true})
+
+    }else{
+      res.status(401).send({message: auth_status.error})
+    }
+  }catch(e){
+    console.log(e)
+  }
+})
+
 
 app.listen(PORT, () => {
 console.log(`Приложение запущено на port:${PORT}`);

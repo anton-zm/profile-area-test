@@ -60,7 +60,7 @@ class Api implements ProjectApi {
     async createContact(contact: Contact): Promise<boolean> {
         try {
             const result = await axios.patch(`${config.server_url}/contacts`, {
-                id: contact.id
+                contact
             })
             
             return true
@@ -75,7 +75,10 @@ class Api implements ProjectApi {
     }
 
     async updateContact(contact: Contact): Promise<boolean> {
-        throw new Error('Not implemented yet')
+        const result = await axios.patch(`${config.server_url}/edit-contact`, {
+            contact
+        })
+        return true
     }
 }
 
