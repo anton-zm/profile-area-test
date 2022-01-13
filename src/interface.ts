@@ -9,7 +9,7 @@ export interface Contact {
     name: string,
     phone: string,
     email: string,
-    id? : string
+    id : string
 }
 
 export interface User {

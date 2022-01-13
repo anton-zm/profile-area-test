@@ -19,11 +19,11 @@ userSchema.statics.findUserByCredentials = function (username, password) {
       .select('+password')
       .then((user:any) => {
         if (!user) {
-          return Promise.reject(new Error('Неправильный логин или пароль'));
+          return Promise.reject(new Error('Wrong login or password'));
         }
         return bcrypt.compare(password, user.password).then((matched) => {
           if (!matched) {
-            return Promise.reject(new Error('Неправильный логин или пароль'));
+            return Promise.reject(new Error('Wrong login or password'));
           }
           return user;
         });

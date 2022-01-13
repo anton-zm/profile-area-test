@@ -58,7 +58,16 @@ class Api implements ProjectApi {
     }
 
     async createContact(contact: Contact): Promise<boolean> {
-        throw new Error('Not implemented yet')
+        try {
+            const result = await axios.patch(`${config.server_url}/contacts`, {
+                id: contact.id
+            })
+            
+            return true
+        }catch(e){
+            console.log(e)
+            return false
+        }
     }
 
     async deleteContact(id: string): Promise<boolean> {

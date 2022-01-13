@@ -9,6 +9,27 @@ const bodyParser = require('body-parser');
 const app = express();
 const PORT = 3010
 
+const auth = (auth_token: string) => {
+  const response = { isAuth: false, id: null, error: 'Authorization required' }
+  if (!auth_token || !auth_token.startsWith('Bearer ')) {
+    return response
+  }else{
+    const token = auth_token.replace('Bearer ', '');
+    let payload;
+    try {
+      payload = jwt.verify(token, 'dev-secret');
+      response.isAuth = true
+      response.error = ''
+      //@ts-ignore
+      response.id = payload._id
+      return response
+    } catch (err) {
+      console.log(err)
+      return response
+    }
+  }
+}
+
 mongoose.connect('mongodb://localhost:27017/contacts', {
     //@ts-ignore
     useNewUrlParser: true,
@@ -62,19 +83,41 @@ app.post('/signin', (req,res) => {
 
 app.get('/contacts', async (req,res) => {
   const { authorization } = req.headers;
-  if (!authorization || !authorization.startsWith('Bearer ')) {
-    res.status(403).send({message: 'Bad request'})
-  }else{
-    const token = authorization.replace('Bearer ', '');
-  let payload;
-  try {
-    payload = jwt.verify(token, 'dev-secret');
-  } catch (err) {
-    res.status(401).send({message: 'Необходима авторизация'})
+  const auth_status = auth(authorization!)
+
+  try{
+    if(auth_status.isAuth){
+      //@ts-ignore
+      const user = await User.findById(auth_status.id)
+      res.send({data: user.contacts})
+    }else{
+      res.status(401).send({message: auth_status.error})
+    }
+  }catch(e){
+    console.log(e)
   }
-  //@ts-ignore
-  const user = await User.findById(payload?._id)
-  res.send({data: user.contacts})
+})
+
+app.patch('/contacts', async (req,res) => {
+  const { authorization } = req.headers;
+  const { contact } = req.body;
+  const auth_status = auth(authorization!)
+
+  try {
+    if(auth_status.isAuth){
+      const user = await User.findById(auth_status.id)
+      const contacts = user.contacts
+      const updContacts = [...contacts, contact]
+      await User.findByIdAndUpdate(auth_status.id, {
+        contacts: updContacts
+      })
+      res.send({data: contact, ok: true})
+
+    }else{
+      res.status(401).send({message: auth_status.error})
+    }
+  }catch(e){
+    console.log(e)
   }
 })
 
