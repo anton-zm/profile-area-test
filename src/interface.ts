@@ -30,7 +30,7 @@ export interface ProjectApi {
         setLogin: () => void
     ): Promise<boolean>
 
-    getContacts(id: string): Promise<Contact[]>
+    getContacts(id: string, token: string): Promise<Contact[]>
 
     createContact(contact: Contact): Promise<boolean>
 

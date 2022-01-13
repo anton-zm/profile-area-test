@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Contact, ProjectApi, User } from "../interface";
+import { Contact, ProjectApi } from "../interface";
 import { config } from "../config";
 import { hydrateUser } from "./hydrate";
 
@@ -10,7 +10,7 @@ class Api implements ProjectApi {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-              },
+            },
               body: JSON.stringify({ username: name, password }),
             })
             .then(res => res.json())
@@ -42,8 +42,19 @@ class Api implements ProjectApi {
         }
     }
 
-    async getContacts(id: string): Promise<Contact[]> {
-        throw new Error('Not implemented yet')
+    async getContacts(id: string, token: string): Promise<Contact[]> {
+        return fetch(`${config.server_url}/contacts`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                authorization: `Bearer ${token}`,
+            },
+        }).then(res => {
+            return res.json()
+        }).then(res => {
+            console.log(res)
+            return res
+        }).catch(e => console.log(e))
     }
 
     async createContact(contact: Contact): Promise<boolean> {

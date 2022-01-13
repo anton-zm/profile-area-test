@@ -60,6 +60,23 @@ app.post('/signin', (req,res) => {
   }
 })
 
+app.get('/contacts', async (req,res) => {
+  const { authorization } = req.headers;
+  if (!authorization || !authorization.startsWith('Bearer ')) {
+    res.status(403).send({message: 'Bad request'})
+  }else{
+    const token = authorization.replace('Bearer ', '');
+  let payload;
+  try {
+    payload = jwt.verify(token, 'dev-secret');
+  } catch (err) {
+    res.status(401).send({message: 'Необходима авторизация'})
+  }
+  //@ts-ignore
+  const user = await User.findById(payload?._id)
+  res.send({data: user.contacts})
+  }
+})
 
 
 app.listen(PORT, () => {
