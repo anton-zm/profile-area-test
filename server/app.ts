@@ -44,11 +44,6 @@ app.get('/test', (_req: any, res: { send: (arg0: string) => void; }) => {
     res.send('Server is working and everything OK!')
 })
 
-// app.get('/users', (req, res) => {
-//   User.find({})
-//     .then((users: any) => res.send({data: users}))
-// })
-
 app.post('/signup', (req, res) => {
   const { username, password } = req.body;
   const contacts:any[] = []
@@ -136,6 +131,29 @@ app.patch('/edit-contact', async (req,res) => {
         contacts: updContacts
       })
       res.send({data: contact, ok: true})
+
+    }else{
+      res.status(401).send({message: auth_status.error})
+    }
+  }catch(e){
+    console.log(e)
+  }
+})
+
+app.patch('/delete-contact/:id', async (req,res) => {
+  const { authorization } = req.headers;
+  const { id } = req.params;
+  const auth_status = auth(authorization!)
+
+  try {
+    if(auth_status.isAuth){
+      const user = await User.findById(auth_status.id)
+      const contacts = user.contacts.filter((e:any) => e.id !== id)
+
+      await User.findByIdAndUpdate(auth_status.id, {
+        contacts,
+      })
+      res.send({message: `${id} - removed!`, ok: true})
 
     }else{
       res.status(401).send({message: auth_status.error})
