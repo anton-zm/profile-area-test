@@ -17,12 +17,14 @@ const App = observer(() => {
     const token = localStorage.getItem('token')
     if(user && token){
       const userObj = JSON.parse(user)
+      store.setUser(userObj)
       store.setLogin(true)
       api.getContacts(userObj.id, token)
     }else{
       store.setLogin(false)
+      localStorage.clear()
     }
-  },[store.login])
+  },[store, store.login])
   
   return (
     <Ctx.Provider value={Store}>

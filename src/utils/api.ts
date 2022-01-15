@@ -51,9 +51,6 @@ class Api implements ProjectApi {
             },
         }).then(res => {
             return res.json()
-        }).then(res => {
-            console.log(res)
-            return res
         }).catch(e => console.log(e))
     }
 
