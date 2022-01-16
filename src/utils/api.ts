@@ -1,5 +1,5 @@
 import axios from "axios";
-import { IContact, ProjectApi, User } from "../interface";
+import { IContact, ProjectApi } from "../interface";
 import { config } from "../config";
 import { hydrateUser } from "./hydrate";
 
@@ -77,11 +77,6 @@ class Api implements ProjectApi {
     async deleteContact(id: string): Promise<any> {
         const token = localStorage.getItem('token')
         try {
-            // const result = await axios.patch(`${config.server_url}/delete-contact/${id}`, {
-            //     contact
-            // })
-            
-            //return true
             fetch(`${config.server_url}/delete-contact/${id}`, {
                 method: 'PATCH',
                 headers: {
@@ -98,9 +93,22 @@ class Api implements ProjectApi {
     }
 
     async updateContact(contact: IContact): Promise<boolean> {
-        const result = await axios.patch(`${config.server_url}/edit-contact`, {
-            contact
-        })
+        const token = localStorage.getItem('token')
+        try {
+            fetch(`${config.server_url}/edit-contact`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({contact})
+            }).then(res => {
+                return res.json()
+            })
+        }catch(e){
+            console.log(e)
+            return false
+        }
         return true
     }
 }

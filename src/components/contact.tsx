@@ -8,6 +8,7 @@ import trash from '../assets/img/trash-2.svg'
 import edit from '../assets/img/edit-2.svg'
 import { api } from "../utils/api";
 import { ConfirmModal } from "./modals/confirm-modal";
+import { EditModal } from "./modals/edit-contact-modal";
 
 const ContactWrapper = styled.div`
     border: 3px solid ${Colors.GREY};
@@ -40,15 +41,17 @@ const HandleBlock = styled.div`
 export const Contact = ({contact}:{contact:IContact}) => {
     const [handle, setHandle] = useState(false)
     const [confirmModal, setConfirmModal] = useState(false)
+    const [editModal, setEditModal] = useState(false)
 
     return (
         <ContactWrapper onMouseMove={() => setHandle(true)} onMouseLeave={() => setHandle(false)}>
             {confirmModal && <ConfirmModal contact={contact} onClose={()=> setConfirmModal(false)} />}
+            {editModal && <EditModal contact={contact} onClose={()=> setEditModal(false)} />}
             <HandleBlock className="flex-row">
             {handle && 
             <>
                 <img src={trash} alt="delete" onClick={() => setConfirmModal(true)} className="clickable" />
-                <img src={edit} alt="edit" onClick={() => {}} className="clickable" style={{marginLeft: 8}} />
+                <img src={edit} alt="edit" onClick={() => setEditModal(true)} className="clickable" style={{marginLeft: 8}} />
             </>
             }
             </HandleBlock>
