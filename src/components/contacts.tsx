@@ -1,25 +1,32 @@
 import { observer } from "mobx-react-lite";
-import React from "react";
+import React, { useState } from "react";
 import { Colors, IContact } from "../interface";
 import { useStore } from "../store/use-store";
 import { Button } from "./button";
 import { Contact } from "./contact";
 import { Content } from "./content-wrapper";
 import { SearchForm } from "./forms/search-form";
+import { CreateModal } from "./modals/create-contact-modal";
 
-const ContactsHeadings = () => (
-    <div className="flex-row w100 between">
+const ContactsHeadings = () => {
+    const [modal, setModal] = useState(false)
+    return (
+        <div className="flex-row w100 between">
+        {modal && <CreateModal onClose={()=> setModal(false)} />}
         <SearchForm />
         <Button 
             fill={Colors.MAIN}
             centered
             width='20%' 
-            onClick={() => {}}
+            onClick={() => setModal(true)}
         >
             Add contact
         </Button>
     </div>
-)
+    )
+}
+    
+
 
 
 

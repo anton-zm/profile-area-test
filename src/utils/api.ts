@@ -62,16 +62,23 @@ class Api implements ProjectApi {
     }
 
     async createContact(contact: IContact): Promise<boolean> {
+        const token = localStorage.getItem('token')
         try {
-            const result = await axios.patch(`${config.server_url}/contacts`, {
-                contact
+            fetch(`${config.server_url}/contacts`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({contact})
+            }).then(res => {
+                return res.json()
             })
-            
-            return true
         }catch(e){
             console.log(e)
             return false
         }
+        return true
     }
 
     async deleteContact(id: string): Promise<any> {

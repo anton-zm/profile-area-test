@@ -2,20 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { Modal } from './modal'
 import { Button } from '../button';
 import { observer } from "mobx-react-lite"
-import { Colors, IContact } from '../../interface';
+import { Colors } from '../../interface';
 import { api } from '../../utils/api';
 import { useStore } from '../../store/use-store';
 import { Loader } from '../loader';
 import { ErrorText, TextInput } from '../forms/typography';
 import * as EmailValidator from 'email-validator';
+import { v4 as uuidv4 } from 'uuid';
 
-export const EditModal = observer(({contact, onClose}:{contact: IContact, onClose:()=> void}) => {
+
+export const CreateModal = observer(({onClose}:{onClose:()=> void}) => {
     const store = useStore()
     const token = localStorage.getItem('token')
     const [loader, setLoader] = useState(false)
-    const [name, setName] = useState(contact.name)
-    const [email, setMail] = useState(contact.email)
-    const [phone, setPhone] = useState(contact.phone)
+    const [name, setName] = useState('')
+    const [email, setMail] = useState('')
+    const [phone, setPhone] = useState('')
     const [nameError, setNameError] = useState('')
     const [phoneError, setPhoneError] = useState('')
     const [mailError, setMailError] = useState('')
@@ -51,6 +53,7 @@ export const EditModal = observer(({contact, onClose}:{contact: IContact, onClos
                     <TextInput 
                         value={name} 
                         type='text' 
+                        placeholder='Enter name'
                         onChange={(e) => {
                             setName(e.target.value)
                             setNameError('')
@@ -60,6 +63,7 @@ export const EditModal = observer(({contact, onClose}:{contact: IContact, onClos
                     <TextInput 
                         value={phone} 
                         type='text' 
+                        placeholder='Enter phone number'
                         onChange={(e) => {
                             setPhone(e.target.value)
                             setNameError('')
@@ -68,7 +72,8 @@ export const EditModal = observer(({contact, onClose}:{contact: IContact, onClos
                     <ErrorText>{phoneError}</ErrorText>
                     <TextInput 
                         value={email} 
-                        type='text' 
+                        type='text'
+                        placeholder='Enter email address' 
                         onChange={(e) => {
                             setMail(e.target.value)
                             setNameError('')
@@ -85,7 +90,7 @@ export const EditModal = observer(({contact, onClose}:{contact: IContact, onClos
                         if(!nameError && !phoneError && !mailError){
                             try {
                                 setLoader(true)
-                                await api.updateContact({name, email, phone, id: contact.id})
+                                await api.createContact({name, email, phone, id: uuidv4()})
                                 api.getUser(token!)
                                     .then((res) => {
                                     store.setUser(res)
