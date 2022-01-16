@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Contact, ProjectApi } from "../interface";
+import { IContact, ProjectApi, User } from "../interface";
 import { config } from "../config";
 import { hydrateUser } from "./hydrate";
 
@@ -42,8 +42,8 @@ class Api implements ProjectApi {
         }
     }
 
-    async getContacts(id: string, token: string): Promise<Contact[]> {
-        return fetch(`${config.server_url}/contacts`, {
+    async getUser(token: string): Promise<any> {
+        return fetch(`${config.server_url}/user`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -51,10 +51,17 @@ class Api implements ProjectApi {
             },
         }).then(res => {
             return res.json()
-        }).catch(e => console.log(e))
+        }).then(res => {
+            return {
+                id: res.data._id,
+                contacts: res.data.contacts,
+                username: res.data.username
+            }
+        })
+        .catch(e => console.log(e))
     }
 
-    async createContact(contact: Contact): Promise<boolean> {
+    async createContact(contact: IContact): Promise<boolean> {
         try {
             const result = await axios.patch(`${config.server_url}/contacts`, {
                 contact
@@ -67,11 +74,30 @@ class Api implements ProjectApi {
         }
     }
 
-    async deleteContact(id: string): Promise<boolean> {
-        throw new Error('Not implemented yet')
+    async deleteContact(id: string): Promise<any> {
+        const token = localStorage.getItem('token')
+        try {
+            // const result = await axios.patch(`${config.server_url}/delete-contact/${id}`, {
+            //     contact
+            // })
+            
+            //return true
+            fetch(`${config.server_url}/delete-contact/${id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    authorization: `Bearer ${token}`,
+                },
+            }).then(res => {
+                return res.json()
+            }).then(res => console.log(res))
+        }catch(e){
+            console.log(e)
+            return false
+        }
     }
 
-    async updateContact(contact: Contact): Promise<boolean> {
+    async updateContact(contact: IContact): Promise<boolean> {
         const result = await axios.patch(`${config.server_url}/edit-contact`, {
             contact
         })

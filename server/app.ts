@@ -76,7 +76,7 @@ app.post('/signin', (req,res) => {
   }
 })
 
-app.get('/contacts', async (req,res) => {
+app.get('/user', async (req,res) => {
   const { authorization } = req.headers;
   const auth_status = auth(authorization!)
 
@@ -84,7 +84,7 @@ app.get('/contacts', async (req,res) => {
     if(auth_status.isAuth){
       //@ts-ignore
       const user = await User.findById(auth_status.id)
-      res.send({data: user.contacts})
+      res.send({data: user})
     }else{
       res.status(401).send({message: auth_status.error})
     }

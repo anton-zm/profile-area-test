@@ -16,10 +16,12 @@ const App = observer(() => {
     const user = localStorage.getItem('user')
     const token = localStorage.getItem('token')
     if(user && token){
-      const userObj = JSON.parse(user)
-      store.setUser(userObj)
-      store.setLogin(true)
-      api.getContacts(userObj.id, token)
+      api.getUser(token)
+        .then((res) => {
+          store.setUser(res)
+          store.setLogin(true)
+          localStorage.setItem('user', JSON.stringify(res))
+        })
     }else{
       store.setLogin(false)
       localStorage.clear()
