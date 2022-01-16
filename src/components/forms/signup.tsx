@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
 import { ErrorText, FormTitle, PromptText, TextInput } from "./typography";
-import { Colors, User } from "../../interface";
+import { Colors } from "../../interface";
 import { Button } from "../button";
 import { useStore } from "../../store/use-store";
 import { api } from "../../utils/api";

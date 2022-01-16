@@ -4,7 +4,11 @@ import { FormType, User } from "../interface"
 export class Storage {
     _isLogged = false
     _form = 'signin'
-    _user = {}
+    _user:User = {
+        username: '',
+        contacts: [],
+        id: ''
+    }
     _searchValue = ''
 
     constructor() {

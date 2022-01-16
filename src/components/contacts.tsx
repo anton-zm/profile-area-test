@@ -32,6 +32,11 @@ export const Contacts = observer(() => {
     const [data, setData] = useState(user.contacts)
 
     useEffect(() => {
+        const user = JSON.parse(store.user)
+        setData(user.contacts)
+    },[store.user])
+
+    useEffect(() => {
         if(store.searchValue){
             const filteredData = user.contacts.filter((e: IContact) => {
                 return e.name.toLowerCase().startsWith(store.searchValue.toLowerCase())
@@ -47,9 +52,9 @@ export const Contacts = observer(() => {
         <div style={{marginTop:48}}>
             <Content>
                 <ContactsHeadings  />
-                <div style={{marginTop: 48}} className="flex-row wrap w100">
+                {data.length ? <div style={{marginTop: 48}} className="flex-row wrap w100">
                     {data.map((e:IContact) => <Contact key={e.id} contact={e} />)}
-                </div>
+                </div> : <p style={{margin: '120px auto', textAlign: 'center'}}>You don't save any contacts yet</p>}
             </Content>
         </div>
     )

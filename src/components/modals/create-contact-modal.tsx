@@ -48,7 +48,7 @@ export const CreateModal = observer(({onClose}:{onClose:()=> void}) => {
     return (
         <Modal onClose={onClose} width='400px'>
             <div className='flex-column centered-align'>
-                <h3 style={{textAlign:'center', marginTop:48}}>Edit contact</h3>
+                <h3 style={{textAlign:'center', marginTop:48}}>Create new contact</h3>
                 <div className="flex-column">
                     <TextInput 
                         value={name} 
