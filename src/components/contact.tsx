@@ -7,6 +7,7 @@ import mail from '../assets/img/mail.svg'
 import trash from '../assets/img/trash-2.svg'
 import edit from '../assets/img/edit-2.svg'
 import { api } from "../utils/api";
+import { ConfirmModal } from "./modals/confirm-modal";
 
 const ContactWrapper = styled.div`
     border: 3px solid ${Colors.GREY};
@@ -38,20 +39,15 @@ const HandleBlock = styled.div`
 
 export const Contact = ({contact}:{contact:IContact}) => {
     const [handle, setHandle] = useState(false)
-
-    const deleteContact = () => {
-        api.deleteContact(contact.id)
-            .then((res) => {
-                console.log(res)
-            })
-    }
+    const [confirmModal, setConfirmModal] = useState(false)
 
     return (
         <ContactWrapper onMouseMove={() => setHandle(true)} onMouseLeave={() => setHandle(false)}>
+            {confirmModal && <ConfirmModal contact={contact} onClose={()=> setConfirmModal(false)} />}
             <HandleBlock className="flex-row">
             {handle && 
             <>
-                <img src={trash} alt="delete" onClick={deleteContact} className="clickable" />
+                <img src={trash} alt="delete" onClick={() => setConfirmModal(true)} className="clickable" />
                 <img src={edit} alt="edit" onClick={() => {}} className="clickable" style={{marginLeft: 8}} />
             </>
             }

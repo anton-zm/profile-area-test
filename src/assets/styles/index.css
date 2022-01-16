@@ -62,3 +62,10 @@ code {
 .clickable {
 	cursor: pointer;
 }
+
+.modal-close-icon {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	transform: rotate(45deg);
+}
