@@ -3,6 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import searchIcon from '../../assets/img/search.svg'
 import { Colors } from "../../interface";
+import { useStore } from "../../store/use-store";
 
 const SearchInput = styled.input`
     border: none;
@@ -15,10 +16,14 @@ const SearchInput = styled.input`
 `
 
 export const SearchForm = observer(() => {
+    const store = useStore()
     return (
         <div className="flex-row" style={{width: '70%', alignItems:'center'}}>
             <img style={{width: 30, height: 30}} src={searchIcon} alt='search' />
-            <SearchInput type='text' placeholder= 'Enter name' onChange={() => {}} />
+            <SearchInput 
+                type='text' 
+                placeholder= 'Enter name' 
+                onChange={(e) => store.setSearchValue(e.target.value)} />
         </div>
     )
 })

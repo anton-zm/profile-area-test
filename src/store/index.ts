@@ -5,6 +5,7 @@ export class Storage {
     _isLogged = false
     _form = 'signin'
     _user = {}
+    _searchValue = ''
 
     constructor() {
         makeAutoObservable(this)
@@ -19,6 +20,9 @@ export class Storage {
     setUser(v:User){
         this._user = v
     }
+    setSearchValue(v:string){
+        this._searchValue = v
+    }
 
     get login(){
         return this._isLogged
@@ -28,6 +32,9 @@ export class Storage {
     }
     get user(){
         return JSON.stringify(this._user)
+    }
+    get searchValue(){
+        return this._searchValue
     }
 }
 

@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Colors, IContact } from "../interface";
 import { useStore } from "../store/use-store";
 import { Button } from "./button";
@@ -25,20 +25,28 @@ const ContactsHeadings = () => {
     </div>
     )
 }
-    
-
-
-
-
+ 
 export const Contacts = observer(() => {
     const store = useStore()
     const user = JSON.parse(store.user)
-    const data = user.contacts
+    const [data, setData] = useState(user.contacts)
+
+    useEffect(() => {
+        if(store.searchValue){
+            const filteredData = user.contacts.filter((e: IContact) => {
+                return e.name.toLowerCase().startsWith(store.searchValue.toLowerCase())
+            })
+            setData(filteredData)
+        }else{
+            setData(user.contacts)
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[store.searchValue])
 
     return (
         <div style={{marginTop:48}}>
             <Content>
-                <ContactsHeadings />
+                <ContactsHeadings  />
                 <div style={{marginTop: 48}} className="flex-row wrap w100">
                     {data.map((e:IContact) => <Contact key={e.id} contact={e} />)}
                 </div>

@@ -6,7 +6,6 @@ import phone from '../assets/img/phone.svg'
 import mail from '../assets/img/mail.svg'
 import trash from '../assets/img/trash-2.svg'
 import edit from '../assets/img/edit-2.svg'
-import { api } from "../utils/api";
 import { ConfirmModal } from "./modals/confirm-modal";
 import { EditModal } from "./modals/edit-contact-modal";
 
